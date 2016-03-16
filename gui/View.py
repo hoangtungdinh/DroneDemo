@@ -130,7 +130,8 @@ class View(QtGui.QWidget):
         self._draw_new_drone_pose(drone_mesh)
 
     def _update_virtual_environment(self):
-        elevation_map_mesh = DrawingHelper.create_elevation_map_mesh(self._controller.get_elevation_map(),
+        virtual_environment_objects = self._controller.get_added_objects()
+        elevation_map_mesh = DrawingHelper.create_elevation_map_mesh(virtual_environment_objects,
                                                                      self._map_params.resolution)
         self._draw_new_elevation_map(elevation_map_mesh)
-        self._update_added_object_list(self._controller.get_added_objects())
+        self._update_added_object_list(virtual_environment_objects)
