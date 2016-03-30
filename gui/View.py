@@ -3,6 +3,7 @@ from PyQt4 import QtGui
 
 from Controller import Controller
 from DrawingHelper import DrawingHelper
+from gui.CustomizedGLGridItem import CustomizedGLGridItem
 from gui.Popup import Popup
 
 
@@ -26,7 +27,7 @@ class View(QtGui.QWidget):
 
         # store the previous mesh locally
         self._drone_mesh = None
-        self._elevation_map_mesh = None
+        self._elevation_map_meshes = None
 
     def _init_components(self):
         """
@@ -45,6 +46,7 @@ class View(QtGui.QWidget):
         self.setLayout(grid)
         # position x, position y, width, height
         self.setGeometry(100, 0, 1024, 720)
+
         self.show()
 
     def _init_object_list_console(self, grid):
@@ -69,8 +71,9 @@ class View(QtGui.QWidget):
 
         self._map_3d = gl.GLViewWidget()
         self._map_3d.setCameraPosition(distance=80 * (res.x + res.y) / 2)
+        self._map_3d.setBackgroundColor('w')
 
-        g = gl.GLGridItem()
+        g = CustomizedGLGridItem()
         g.scale(res.x, res.y, (res.x + res.y) / 2)
         g.setSize(width.x, width.y)
 
@@ -113,17 +116,18 @@ class View(QtGui.QWidget):
             self._drone_mesh.translate(-width.x * res.x / 2, -width.y * res.y / 2, 0, True)
             self._map_3d.addItem(self._drone_mesh)
 
-    def _draw_new_elevation_map(self, elevation_map_mesh):
-        if self._elevation_map_mesh is not None:
-            self._map_3d.removeItem(self._elevation_map_mesh)
+    def _draw_new_elevation_map(self, elevation_map_meshes):
+        if self._elevation_map_meshes is not None:
+            self._map_3d.removeItem(self._elevation_map_meshes)
 
         res = self._map_params.resolution
         width = self._map_params.map_width
 
-        self._elevation_map_mesh = elevation_map_mesh
-        if self._elevation_map_mesh is not None:
-            self._elevation_map_mesh.translate(-width.x * res.x / 2, -width.y * res.y / 2, 0, True)
-            self._map_3d.addItem(self._elevation_map_mesh)
+        self._elevation_map_meshes = elevation_map_meshes
+        if self._elevation_map_meshes is not None:
+            for mesh in self._elevation_map_meshes:
+                mesh.translate(-width.x * res.x / 2, -width.y * res.y / 2, 0, True)
+                self._map_3d.addItem(mesh)
 
     def _update_drone_pose(self):
         drone_mesh = DrawingHelper.create_drone_mesh(self._controller.get_drone_pose(), self._map_params.resolution)
@@ -131,7 +135,7 @@ class View(QtGui.QWidget):
 
     def _update_virtual_environment(self):
         virtual_environment_objects = self._controller.get_added_objects()
-        elevation_map_mesh = DrawingHelper.create_elevation_map_mesh(virtual_environment_objects,
+        elevation_map_meshes = DrawingHelper.create_elevation_map_mesh(virtual_environment_objects,
                                                                      self._map_params.resolution)
-        self._draw_new_elevation_map(elevation_map_mesh)
+        self._draw_new_elevation_map(elevation_map_meshes)
         self._update_added_object_list(virtual_environment_objects)

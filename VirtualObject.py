@@ -1,4 +1,4 @@
-from collections import namedtuple
+import random
 
 from Helper import Cell
 
@@ -12,6 +12,7 @@ class VirtualObject:
         self._name = ""
         self._cells = frozenset()
         self._read_file(file_path)
+        self._color = (random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1))
 
     def get_cells(self):
         """
@@ -51,6 +52,9 @@ class VirtualObject:
         :rtype: str
         """
         return self._name
+
+    def get_color(self):
+        return self._color
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
