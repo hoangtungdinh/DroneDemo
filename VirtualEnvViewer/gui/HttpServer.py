@@ -3,7 +3,7 @@ from PyQt4.QtCore import QThread, QObject
 import flask
 from flask import jsonify, request, Response
 
-from Server.Helper import Point
+from Helper import Point
 
 _app = flask.Flask(__name__)
 
