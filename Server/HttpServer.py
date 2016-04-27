@@ -1,6 +1,7 @@
 import flask
 from flask import jsonify, request, Response
-from jsonpickle import json
+# from jsonpickle import json
+import json
 
 from Configuration import Configuration
 from VirtualEnvironment import VirtualEnvironment
@@ -27,7 +28,9 @@ def get_virtual_environment():
     environment_configuration = _virtual_environment.get_map_params()
     a = _virtual_environment.get_virtual_objects()
 
-    return jsonify(environment_configuration=environment_configuration, virtual_objects=a)
+    env_json = json.dumps({'environment_configuration': environment_configuration, 'virtual_objects': a})
+
+    return Response(response=env_json, status=200, mimetype="application/json")
 
 
 @app.route("/virtualEnvironment", methods=['POST'])
@@ -82,7 +85,3 @@ def set_reset_pose():
 
 def get_reset_pose():
     return need_reset_pose
-
-
-print "AAA"
-app.run(port=7000)
