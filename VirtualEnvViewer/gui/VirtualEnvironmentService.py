@@ -30,8 +30,13 @@ class VirtualEnvironmentService(QObject):
     def _parse_elevation_map_data(self, data):
 
         env_configuration_raw = data['environment_configuration']
-        resolution_data = env_configuration_raw[0]
-        width_data = env_configuration_raw[1]
+        # resolution_data = env_configuration_raw[0]
+        # width_data = env_configuration_raw[1]
+
+        resolution_data = [env_configuration_raw["resolution"]["x"],
+                            env_configuration_raw["resolution"]["y"]]
+
+        width_data= [env_configuration_raw["map_width"]["x"], env_configuration_raw["map_width"]["y"]]
 
         map_params = MapParams(Resolution(resolution_data[0], resolution_data[1]),
                                MapWidth(width_data[0], width_data[1]))

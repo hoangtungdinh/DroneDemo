@@ -12,7 +12,7 @@ from gui.Controller import Controller
 
 
 class DroneApp:
-    server_url = "http://127.0.0.1:7000"
+    server_url = "http://192.168.1.1:5000"
 
     def __init__(self):
         app = QtGui.QApplication(sys.argv)

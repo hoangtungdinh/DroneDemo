@@ -30,6 +30,7 @@ def add_object():
     if data:
         # qconn.emit(data)
         if 'Point' == data['type'] and isinstance(data['coordinates'], list) and len(data['coordinates']) == 3:
+            print data
             coordinates = Point(data['coordinates'][0], data['coordinates'][1], data['coordinates'][2])
             qconn.emit(coordinates)
             return Response(status=200)
@@ -47,8 +48,11 @@ class MyApp(QThread):
 
         self.app = myApp
 
+
     def run(self):
-        self.app.run()
+        self.app.config['HOST'] = 'localhost'
+        self.app.config['PORT'] = 5000
+        self.app.run(host='0.0.0.0')
 
 
 webapp = MyApp(_app)
