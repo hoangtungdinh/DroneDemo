@@ -49,7 +49,6 @@ class MyApp(QThread):
         self.app = myApp
 
     def run(self):
-        self.app.run()
         self.app.config['HOST'] = 'localhost'
         self.app.config['PORT'] = 5000
         self.app.run(host='0.0.0.0')
