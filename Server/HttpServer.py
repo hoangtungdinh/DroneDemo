@@ -7,11 +7,7 @@ from Configuration import Configuration
 from VirtualEnvironment import VirtualEnvironment
 from VirtualObject import VirtualObject
 
-
-
-
 __author__ = 'mario'
-
 
 app = flask.Flask(__name__)
 configuration = Configuration()
@@ -22,6 +18,7 @@ need_reset_pose = False
 @app.route("/")
 def root():
     return "Hello World!"
+
 
 @app.route("/virtualEnvironment", methods=['GET'])
 def get_virtual_environment():
@@ -52,6 +49,7 @@ def add_object():
     else:
         return Response(status=400)
 
+
 @app.route("/virtualEnvironment", methods=['DELETE'])
 def delete_object():
     data = request.get_json(force=True)
@@ -71,17 +69,22 @@ def delete_object():
     else:
         return Response(status=400)
 
+
 @app.route("/virtualEnvironment/reset", methods=['POST'])
 def reset_pose():
     print "reset"
     if get_reset_pose():
         return Response(status=200)
     else:
+        set_reset_pose()
         return Response(status=409)
 
 
 def set_reset_pose():
+    global need_reset_pose
     need_reset_pose = True
 
+
 def get_reset_pose():
+    global need_reset_pose
     return need_reset_pose
