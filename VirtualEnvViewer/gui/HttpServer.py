@@ -7,6 +7,7 @@ from Helper import Point
 
 _app = flask.Flask(__name__)
 
+
 class QConnector(QObject):
     drone_pose_update_signal = QtCore.pyqtSignal(object)
 
@@ -18,6 +19,7 @@ class QConnector(QObject):
 
 
 qconn = QConnector()
+
 
 @_app.route("/")
 def root():
@@ -41,7 +43,6 @@ def add_object():
 
 
 class MyApp(QThread):
-
     def __init__(self, myApp):
         QThread.__init__(self)
 
@@ -49,6 +50,9 @@ class MyApp(QThread):
 
     def run(self):
         self.app.run()
+        self.app.config['HOST'] = 'localhost'
+        self.app.config['PORT'] = 5000
+        self.app.run(host='0.0.0.0')
 
 
 webapp = MyApp(_app)
